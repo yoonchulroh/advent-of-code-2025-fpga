@@ -1,0 +1,2 @@
+verilator --cc --exe --build -j 0 -y ../rtl -Wno-WIDTHTRUNC -Wno-WIDTHEXPAND sim_Day10Part2.cpp Day10Part2.v
+./obj_dir/VDay10Part2
