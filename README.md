@@ -13,14 +13,17 @@ The original problem description can be found in https://adventofcode.com/2025/d
 
 Part 1 defines the target as the XOR result of button presses. This repository focuses exclusively on Part 2, as Part 1 is computationally trivial for CPUs, whereas I/O throughput would bottleneck the speedup from an FPGA implementation.
 
-## The algorithm
+## How It Works in a Nutshell
 
 See `How-it-works.md` for a detailed description of the implementation.
 
-This solution uses algorithm suggested by u/tenthmascot and improved by u/DataMn, posted on r/adventofcode on Reddit.
-Check https://www.reddit.com/r/adventofcode/comments/1pk87hl/2025_day_10_part_2_bifurcate_your_way_to_victory/ for the original algorithm.
+This solution is based on the algorithm suggested by u/tenthmascot and improved by u/DataMn, posted on r/adventofcode on Reddit. \
+Check https://www.reddit.com/r/adventofcode/comments/1pk87hl/2025_day_10_part_2_bifurcate_your_way_to_victory/ for the original algorithm. \
+This project adapts this algorithm with Verilog so that it could be run on FPGAs, for significantly reduced execution time and power consumption. The original algorithm was implemented using Python to be run on CPUs.
 
-This project implements this algorithm with Verilog so that it could be run on FPGAs, for significantly reduced execution time. The original algorithm was implemented using Python to be run on CPUs.
+In a nutshell, the algorithm is based on a recursive function, which reduces the size of the problem by half for each function call. Each function call iterates over all combinations of buttons whose parities matches the parity of the target. By doing so, all targets become even numbers, allowing division by 2.
+
+This design created the LSU (Line Solving Unit) for solving each input line by implementing the recursive algorithm in hardware. Each LSU builds a table of linked lists for all parities, for quick iterations over all combinations with the matching parity. LSUs are able to call and return functions by using the stack for storing and restoring function states. For each matching combination, the recursive function is called with the new target. When there are no more matching combinations, it returns to the caller function. The top module includes multiple LSUs that solve each input lines in parallel. The results from LSUs are accumulated, and the final sum is the answer for the whole input.
 
 ## Providing the Input and Interpreting the Output
 
@@ -28,7 +31,7 @@ This solution reads the input from `data/input.txt`. Delete the contents of the 
 
 The file currently contains a custom-generated demo input. In compliance with Advent of Code policies regarding input redistribution, the provided `data/input.txt` contains a custom-generated demo dataset that mimics the structure of official inputs. It follows the same principles, but you may find some differences if you look closely. The correct answer for the demo input is 24549.
 
-For each line of input, this solution outputs the sum of the minimum number of button presses for each line, since reset. Therefore, you only need to check the last output to find the correct answer. The program automatically quits after finding the minimum button presses for all lines in the input. If you need to find the answer for another input set, assert reset to set the current sum back to 0.
+For each line of input, this solution outputs the sum of the minimum number of button presses for each line, since reset. Therefore, you only need to check the last output to find the correct answer. The host-side program automatically quits after finding the minimum button presses for all lines in the input. If you need to find the answer for another input set, assert reset to set the current sum back to 0.
 
 *Note*: This solution contains multiple units that solves each line of input in parallel and Out-of-Order. The intermediate partial sums may be printed without following the order in the input file, but the final result is consistent. 
 
