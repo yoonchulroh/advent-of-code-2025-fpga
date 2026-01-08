@@ -84,6 +84,11 @@ cd sim
 verilator --cc --exe --build -j 0 -y ../rtl -Wno-WIDTHTRUNC -Wno-WIDTHEXPAND sim_Day10Part2.cpp Day10Part2.v
 ```
 
+*Note*: It was found that some versions of Verilator does not accept the flags used in the above command. If the above does not work, try:
+```bash
+verilator --cc --exe --build -j 0 -y ../rtl -Wno-WIDTH sim_Day10Part2.cpp Day10Part2.v
+```
+
 ### Run the Simulation
 Execute the binary created under `sim/obj_dir/` to run the simulation.
 ```bash
