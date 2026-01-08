@@ -84,7 +84,7 @@ cd sim
 verilator --cc --exe --build -j 0 -y ../rtl -Wno-WIDTHTRUNC -Wno-WIDTHEXPAND sim_Day10Part2.cpp Day10Part2.v
 ```
 
-*Note*: It was found that some versions of Verilator does not accept the flags used in the above command. If the above does not work, try:
+*Note*: It was found that some versions of Verilator do not accept the flags used in the above command. If the above does not work, try:
 ```bash
 verilator --cc --exe --build -j 0 -y ../rtl -Wno-WIDTH sim_Day10Part2.cpp Day10Part2.v
 ```
@@ -112,6 +112,7 @@ cd host
 g++ -o InputParser InputParser.cpp
 ./InputParser
 ```
+*Note*: `InputParser.cpp` requires the permission for reading from and writing to `SERIAL_PORT`.
 
 ## Performance Evaluation
 
